@@ -11,6 +11,8 @@ services:
     ports:
       - "8080:8080"   # Spark Master Web UI
       - "7077:7077"   # Spark Master port
+    volumes:
+          - ./shared:/shared
     networks:
       - spark-network
 
