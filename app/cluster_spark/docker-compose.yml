@@ -1,0 +1,70 @@
+services:
+  spark-master:
+    image: bitnami/spark:3.5
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      # corrige Ivy + user
+      - SPARK_SUBMIT_OPTS=-Duser.home=/tmp -Dspark.jars.ivy=/tmp/.ivy2 -Duser.name=spark
+      - JAVA_TOOL_OPTIONS=-Duser.name=spark
+      - USER=spark
+      - HADOOP_USER_NAME=spark
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - ../app/target:/opt/spark-apps
+      - ../shared:/shared
+    networks: [spark-network]
+
+  spark-worker-1:
+    image: bitnami/spark:3.5
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=1g
+      - SPARK_WORKER_CORES=1
+      - SPARK_SUBMIT_OPTS=-Duser.home=/tmp -Dspark.jars.ivy=/tmp/.ivy2 -Duser.name=spark
+      - JAVA_TOOL_OPTIONS=-Duser.name=spark
+      - USER=spark
+      - HADOOP_USER_NAME=spark
+    depends_on: [spark-master]
+    volumes: [../shared:/shared]
+    networks: [spark-network]
+
+  spark-worker-2:
+    image: bitnami/spark:3.5
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=1g
+      - SPARK_WORKER_CORES=1
+      - SPARK_SUBMIT_OPTS=-Duser.home=/tmp -Dspark.jars.ivy=/tmp/.ivy2 -Duser.name=spark
+      - JAVA_TOOL_OPTIONS=-Duser.name=spark
+      - USER=spark
+      - HADOOP_USER_NAME=spark
+    depends_on: [spark-master]
+    volumes: [../shared:/shared]
+    networks: [spark-network]
+
+  spark-worker-3:
+    image: bitnami/spark:3.5
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=1g
+      - SPARK_WORKER_CORES=1
+      - SPARK_SUBMIT_OPTS=-Duser.home=/tmp -Dspark.jars.ivy=/tmp/.ivy2 -Duser.name=spark
+      - JAVA_TOOL_OPTIONS=-Duser.name=spark
+      - USER=spark
+      - HADOOP_USER_NAME=spark
+    depends_on: [spark-master]
+    volumes: [../shared:/shared]
+    networks: [spark-network]
+
+networks:
+  spark-network:
+    driver: bridge

@@ -9,7 +9,7 @@ public class VentesParVilleEtAnnee {
     public static void main(String[] args) {
         SparkSession spark = SparkSession.builder()
                 .appName("Ventes Par Ville et Année")
-                .master("spark://spark-mastergit :7077")
+                .master("spark://spark-master:7077")
                 .getOrCreate();
 
         Dataset<Row> df = spark.read()
